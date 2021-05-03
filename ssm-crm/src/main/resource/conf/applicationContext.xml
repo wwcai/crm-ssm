@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--spring 配置文件：声明 service、dao 和工具类等对象-->
+
+    <context:property-placeholder location="classpath:conf/jdbc.properties"/>
+    <!--声明数据源，连接数据库-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!--声明 SqlSessionFactoryBean 创建 SqlSessionFactory-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:conf/mybatis.xml"/>
+    </bean>
+
+    <!--声明 mybatis 扫描器，创建 dao 对象-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <property name="basePackage" value="com.wwcai.crm.settings.dao;com.wwcai.crm.workbench.dao"/>
+    </bean>
+
+    <!--声明 service 的注解 @Service 所在的包名的位置-->
+    <context:component-scan base-package="com.wwcai.crm.settings.service;com.wwcai.crm.workbench.service"/>
+
+    <bean id="dicService" class="com.wwcai.crm.settings.service.impl.DicServiceImpl"/>
+
+    <!--事务配置：注解的配置，aspectj 的配置-->
+</beans>

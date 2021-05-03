@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wwcai.crm.workbench.dao.CustomerDao">
+
+    <select id="detail" resultType="customer">
+
+        select
+            c.id,
+	        u.name as owner,
+	        c.name,
+	        c.website,
+	        c.phone,
+	        c.createBy,
+	        c.createTime,
+	        c.editBy,
+	        c.editTime,
+	        c.contactSummary,
+	        c.nextContactTime,
+	        c.description,
+	        c.address
+
+        from tbl_customer c
+        join tbl_user u
+        on c.owner=u.id
+        where c.id=#{id}
+    </select>
+
+    <update id="update">
+
+        update tbl_customer set
+	        owner=#{owner},
+	        name=#{name},
+	        website=#{website},
+	        phone=#{phone},
+	        editBy=#{editBy},
+	        editTime=#{editTime},
+	        contactSummary=#{contactSummary},
+	        nextContactTime=#{nextContactTime},
+	        description=#{description},
+	        address=#{address}
+
+	        where id=#{id}
+    </update>
+
+    <select id="getCustomerById" resultType="customer">
+        select * from tbl_customer where id=#{id}
+    </select>
+
+    <delete id="delete">
+        delete from tbl_customer
+        where id in
+        <foreach collection="array" item="id" open="(" close=")"
+                 separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getCustomerByCondition" resultType="customer">
+
+        select
+        c.id,
+        c.name,
+        u.name as owner,
+        c.phone,
+        c.website
+
+        from tbl_customer c
+        join tbl_user u
+        on c.owner = u.id
+        <where>
+
+            <if test="name != null and name != ''">
+                and c.name like '%' #{name} '%'
+            </if>
+
+            <if test="owner != null and owner != ''">
+                and u.name like '%' #{owner} '%'
+            </if>
+
+            <if test="website != null and website != ''">
+                and c.website=#{website}
+            </if>
+
+            <if test="phone != null and phone != ''">
+                and c.phone =#{phone}
+            </if>
+
+
+        </where>
+
+
+        order by c.createTime desc
+
+        limit #{skipCount}, #{pageSize}
+    </select>
+
+    <select id="getTotalByCondition" resultType="int">
+        select count(*)
+        from tbl_customer c
+        join tbl_user u
+        on c.owner = u.id
+        <where>
+
+            <if test="name != null and name != ''">
+                and c.name like '%' #{name} '%'
+            </if>
+
+            <if test="owner != null and owner != ''">
+                and u.owner like '%' #{owner} '%'
+            </if>
+
+            <if test="website != null and website != ''">
+                and c.website like '%' #{website} '%'
+            </if>
+
+            <if test="phone != null and phone != ''">
+                and c.phone =#{phone}
+            </if>
+
+        </where>
+    </select>
+
+    <select id="getCustomerIdByName" resultType="String">
+        select id from tbl_customer where name=#{name}
+    </select>
+
+    <select id="getCustomerName" resultType="String">
+        select name from tbl_customer where name like '%' #{name} '%'
+    </select>
+
+    <insert id="save">
+        insert into tbl_customer(
+            id,
+            owner,
+            name,
+            website,
+            phone,
+            createBy,
+            createTime,
+            editBy,
+            editTime,
+            contactSummary,
+            nextContactTime,
+            description,
+            address
+
+        )
+        values(
+            #{id},
+            #{owner},
+            #{name},
+            #{website},
+            #{phone},
+            #{createBy},
+            #{createTime},
+            #{editBy},
+            #{editTime},
+            #{contactSummary},
+            #{nextContactTime},
+            #{description},
+            #{address}
+
+        )
+
+    </insert>
+
+  	<select id="getCustomerByName" resultType="Customer">
+        select * from tbl_customer where name=#{name}
+    </select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
