@@ -21,4 +21,6 @@ public interface CustomerService {
     boolean update(Customer c);
 
     Customer detail(String id);
+
+    String getCustomerIdByName(String customerName);
 }

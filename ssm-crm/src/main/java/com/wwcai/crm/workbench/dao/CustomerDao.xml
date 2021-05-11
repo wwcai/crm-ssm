@@ -109,7 +109,7 @@
             </if>
 
             <if test="owner != null and owner != ''">
-                and u.owner like '%' #{owner} '%'
+                and u.name like '%' #{owner} '%'
             </if>
 
             <if test="website != null and website != ''">

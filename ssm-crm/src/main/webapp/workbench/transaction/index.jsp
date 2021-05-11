@@ -54,6 +54,23 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$("#qx").prop("checked", $("input[name=xz]").length ==
 					$("input[name=xz]:checked").length);
 		})
+
+		$("#editBtn").click(function () {
+
+			//datetimepicker();
+
+			var $xz = $("input[name=xz]:checked");
+			if($xz.length == 0) {
+				alert("请选中要修改的记录");
+			} else if($xz.length > 1) {
+				alert("只能选择一条记录进行修改")
+			} else {
+
+				sessionStorage.setItem("tranId", $xz.val());
+				window.location.href='${sessionScope.path}workbench/transaction/edit.jsp';
+
+			}
+		})
 		
 	});
 
@@ -211,7 +228,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">来源</div>
-				      <select class="form-control" id="search-clueSource">
+				      <select class="form-control" id="search-source">
 						  <option></option>
 						  <c:forEach items="${sourceList}" var="s">
 							  <option
@@ -237,7 +254,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <button type="button" class="btn btn-primary"
 						  onclick="window.location.href='workbench/transaction/add.do';"><span
 						  class="glyphicon glyphicon-plus"></span> 创建</button>
-				  <button type="button" class="btn btn-default" onclick="window.location.href='workbench/transaction/edit.jsp';"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
+				  <button type="button" class="btn btn-default" id="editBtn" ><span class="glyphicon glyphicon-pencil"></span> 修改 </button>
 				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
 				

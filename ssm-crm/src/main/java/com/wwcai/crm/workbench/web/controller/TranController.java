@@ -41,7 +41,7 @@ public class TranController {
 
 
 
-    @RequestMapping(value = "/getChars.do")
+    @RequestMapping(value = "/getCharts.do")
     @ResponseBody
     public Map<String, Object> getCharts() {
 
@@ -112,6 +112,43 @@ public class TranController {
         request.setAttribute("t", t);
 
         return "/workbench/transaction/detail.jsp";
+    }
+
+    @RequestMapping(value = "/getUserListAndTran.do")
+    @ResponseBody
+    public Map<String, Object> getUserListAndTran(String id) {
+
+        System.out.println("进入查询用户信息列表和根据线索ID查询单条记录的操作");
+
+        Map<String, Object> map = ts.getUserListAndTran(id);
+
+        return map;
+    }
+
+    @RequestMapping(value = "/update.do")
+    public String update(HttpServletRequest request, Tran t) {
+
+        System.out.println("执行更新交易操作");
+
+        String customerName = request.getParameter("customerName");
+        String editTime = DateTimeUtil.getSysTime();
+        String editBy =
+                ((User)request.getSession().getAttribute("user")).getName();
+
+        t.setEditBy(editBy);
+        t.setEditTime(editTime);
+
+
+        boolean flag = ts.update(t,customerName);
+
+        if(flag) {
+
+            return "redirect:/workbench/transaction/index.jsp";
+
+        }
+
+        return "redirect:error.jsp";
+
     }
 
     @RequestMapping(value = "/save.do")

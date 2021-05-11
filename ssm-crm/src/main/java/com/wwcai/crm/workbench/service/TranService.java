@@ -19,4 +19,8 @@ public interface TranService {
     Map<String, Object> getChrats();
 
     PaginationVo<Tran> pageList(Map<String, Object> map, String customerName, String contactsName);
+
+    Map<String, Object> getUserListAndTran(String id);
+
+    boolean update(Tran t, String customerName);
 }

@@ -101,4 +101,12 @@ public class CustomerServiceImpl  implements CustomerService {
 
         return c;
     }
+
+    @Override
+    public String getCustomerIdByName(String customerName) {
+
+
+
+        return customerDao.getCustomerIdByName(customerName);
+    }
 }

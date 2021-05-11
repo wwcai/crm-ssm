@@ -102,14 +102,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		$("#addBtn").click(function () {
 
-			$(".time").datetimepicker({
-				minView: "month",
-				language:  'zh-CN',
-				format: 'yyyy-mm-dd',
-				autoclose: true,
-				todayBtn: true,
-				pickerPosition: "top-left"
-			});
+			datetimepicker();
 
 			$.ajax({
 				url : "workbench/customer/getUserList.do",
@@ -177,14 +170,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		$("#editBtn").click(function () {
 
-			$(".time").datetimepicker({
-				minView: "month",
-				language:  'zh-CN',
-				format: 'yyyy-mm-dd',
-				autoclose: true,
-				todayBtn: true,
-				pickerPosition: "top-left"
-			});
+			datetimepicker()
 
 			var $xz = $("input[name=xz]:checked");
 			if($xz.length == 0) {
@@ -360,6 +346,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			}
 		})
 
+	}
+
+	function datetimepicker() {
+		$(".time").datetimepicker({
+			minView: "month",
+			language:  'zh-CN',
+			format: 'yyyy-mm-dd',
+			autoclose: true,
+			todayBtn: true,
+			pickerPosition: "top-left"
+		});
 	}
 	
 </script>
@@ -605,7 +602,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</tr>
 					</thead>
 					<tbody id="customerBody">
-						<%--<tr>
+					<%--	<tr>
 							<td><input type="checkbox" name="xz" /></td>
 							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.html';">动力节点</a></td>
 							<td>zhangsan</td>

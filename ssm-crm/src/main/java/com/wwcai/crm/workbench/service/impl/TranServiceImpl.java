@@ -1,5 +1,7 @@
 package com.wwcai.crm.workbench.service.impl;
 
+import com.wwcai.crm.settings.dao.UserDao;
+import com.wwcai.crm.settings.domain.User;
 import com.wwcai.crm.utils.DateTimeUtil;
 import com.wwcai.crm.utils.UUIDUtil;
 import com.wwcai.crm.vo.PaginationVo;
@@ -7,10 +9,7 @@ import com.wwcai.crm.workbench.dao.ContactsDao;
 import com.wwcai.crm.workbench.dao.CustomerDao;
 import com.wwcai.crm.workbench.dao.TranDao;
 import com.wwcai.crm.workbench.dao.TranHistoryDao;
-import com.wwcai.crm.workbench.domain.Contacts;
-import com.wwcai.crm.workbench.domain.Customer;
-import com.wwcai.crm.workbench.domain.Tran;
-import com.wwcai.crm.workbench.domain.TranHistory;
+import com.wwcai.crm.workbench.domain.*;
 import com.wwcai.crm.workbench.service.TranService;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +29,8 @@ public class TranServiceImpl implements TranService {
     private CustomerDao customerDao;
     @Resource
     private ContactsDao contactsDao;
+    @Resource
+    private UserDao userDao;
 
     @Override
     public boolean save(Tran t, String customerName) {
@@ -180,5 +181,54 @@ public class TranServiceImpl implements TranService {
         vo.setDatalist(datalist);
 
         return vo;
+    }
+
+    @Override
+    public Map<String, Object> getUserListAndTran(String id) {
+
+        // 取ulist
+        List<User> ulist = userDao.getUserList();
+
+        // 取 c
+        Tran t = tranDao.getTranById(id);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("ulist", ulist);
+        map.put("t", t);
+
+        return map;
+    }
+
+    @Override
+    public boolean update(Tran t, String customerName) {
+        boolean flag = true;
+
+        Customer cus = customerDao.getCustomerByName(customerName);
+
+        if(cus == null) {
+
+            cus = new Customer();
+            cus.setId(UUIDUtil.getUUID());
+            cus.setName(customerName);
+            cus.setEditTime(t.getEditTime());
+            cus.setEditBy(t.getEditBy());
+            cus.setContactSummary(t.getContactSummary());
+            cus.setOwner(t.getOwner());
+            cus.setNextContactTime(t.getNextContactTime());
+
+            int count1 = customerDao.save(cus);
+            if(count1 != 1)
+                flag = false;
+        }
+
+        // 已得到客户Id customerId
+        t.setCustomerId(cus.getId());
+
+        int count2 = tranDao.update(t);
+        if(count2 != 1)
+            flag = false;
+
+
+        return flag;
     }
 }

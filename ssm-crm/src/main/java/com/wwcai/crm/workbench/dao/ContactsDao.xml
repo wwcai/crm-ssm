@@ -5,6 +5,149 @@
 
 <mapper namespace="com.wwcai.crm.workbench.dao.ContactsDao">
 
+    <update id="update">
+        update tbl_contacts set
+           owner=#{owner},
+           source=#{source},
+           customerId=#{customerId},
+           fullname=#{fullname},
+           appellation=#{appellation},
+           email=#{email},
+           mphone=#{mphone},
+           job=#{job},
+           birth=#{birth},
+           editBy=#{editBy},
+           editTime=#{editTime},
+           description=#{description},
+           contactSummary=#{contactSummary},
+           nextContactTime=#{nextContactTime},
+           address=#{address}
+
+           where id=#{id}
+    </update>
+
+    <select id="getContactsById" resultType="contacts">
+        select
+           con.id,
+           con.owner,
+           con.source,
+           cus.name as customerId,
+           con.fullname,
+           con.appellation,
+           con.email,
+           con.mphone,
+           con.job,
+           con.birth,
+           con.createBy,
+           con.createTime,
+           con.editBy,
+           con.editTime,
+           con.description,
+           con.contactSummary,
+           con.nextContactTime,
+           con.address
+        from tbl_contacts con
+        left join tbl_customer cus
+        on cus.id=con.customerId
+        where con.id=#{id}
+    </select>
+
+    <select id="detail" resultType="contacts">
+        select
+            con.id,
+            u.name as owner,
+            con.source,
+            cus.name as customerId,
+            con.fullname,
+            con.appellation,
+            con.email,
+            con.mphone,
+            con.job,
+            con.birth,
+            con.createBy,
+            con.createTime,
+            con.editBy,
+            con.editTime,
+            con.description,
+            con.contactSummary,
+            con.nextContactTime,
+            con.address
+
+        from tbl_contacts con
+        join tbl_user u
+        on con.owner=u.id
+        left join tbl_customer cus
+        on con.customerId=cus.id
+        where con.id=#{id}
+    </select>
+
+    <select id="getCustomerByCondition" resultType="contacts">
+        select
+        c.id,
+        c.fullname,
+        u.name as owner,
+        c.source,
+        cus.name as customerId
+        from tbl_contacts c
+        join tbl_user u
+        on c.owner = u.id
+        left join tbl_customer cus
+        on c.customerId=cus.id
+        <where>
+
+            <if test="fullname != null and fullname != ''">
+                and c.fullname like '%' #{fullname} '%'
+            </if>
+
+            <if test="owner != null and owner != ''">
+                and u.name like '%' #{owner} '%'
+            </if>
+
+            <if test="customerName != null and customerName != ''">
+                and cus.name like '%' #{customerName} '%'
+            </if>
+
+            <if test="source != null and source != ''">
+                and c.source like '%' #{source} '%'
+            </if>
+
+
+        </where>
+
+
+        order by c.createTime desc
+
+        limit #{skipCount}, #{pageSize}
+    </select>
+
+    <select id="getTotalByCondition" resultType="int">
+        select count(*)
+        from tbl_contacts c
+        join tbl_user u
+        on c.owner = u.id
+        left join tbl_customer cus
+        on c.customerId=cus.id
+        <where>
+
+            <if test="fullname != null and fullname != ''">
+                and c.fullname like '%' #{fullname} '%'
+            </if>
+
+            <if test="owner != null and owner != ''">
+                and u.name like '%' #{owner} '%'
+            </if>
+
+            <if test="customerName != null and customerName != ''">
+                and cus.name like '%' #{customerName} '%'
+            </if>
+
+            <if test="source != null and source != ''">
+                and c.source like '%' #{phone} '%'
+            </if>
+
+        </where>
+    </select>
+
     <select id="getContactsByName" resultType="Contacts">
         select
             id,

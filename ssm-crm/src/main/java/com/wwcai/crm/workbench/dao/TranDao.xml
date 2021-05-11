@@ -5,6 +5,55 @@
 
 <mapper namespace="com.wwcai.crm.workbench.dao.TranDao">
 
+    <update id="update">
+        update tbl_tran set
+           owner=#{owner},
+           money=#{money},
+           name=#{name},
+           expectedDate=#{expectedDate},
+           customerId=#{customerId},
+           stage=#{stage},
+           type=#{type},
+           source=#{source},
+           activityId=#{activityId},
+           contactsId=#{contactsId},
+           editBy=#{editBy},
+           editTime=#{editTime},
+           description=#{description},
+           contactSummary=#{contactSummary},
+           nextContactTime=#{nextContactTime}
+        where id=#{id}
+    </update>
+
+    <select id="getTranById" resultType="tran">
+        select
+           	t.id,
+            t.owner,
+            t.money,
+            t.name,
+            t.expectedDate,
+            cus.name as customerId,
+            t.stage,
+            t.type,
+            t.source,
+            ac.name as activityId,
+            con.fullname as contactsId,
+            t.description,
+            t.contactSummary,
+            t.nextContactTime
+
+        from tbl_tran t
+        join tbl_user u
+        on t.owner=u.id
+        left join tbl_customer cus
+        on t.customerId=cus.id
+        left join tbl_activity ac
+        on t.activityId=ac.id
+        left join tbl_contacts con
+        on t.contactsId=con.id
+        where t.id=#{id}
+    </select>
+
     <select id="getTranListByCondition" resultType="tran">
 
         select
@@ -30,7 +79,7 @@
             </if>
 
             <if test="owner != null and owner != ''">
-                and u.owner like '%' #{owner} '%'
+                and u.name like '%' #{owner} '%'
             </if>
 
             <if test="type != null and type != ''">
@@ -74,11 +123,11 @@
             </if>
 
             <if test="owner != null and owner != ''">
-                and u.owner like '%' #{owner} '%'
+                and u.name like '%' #{owner} '%'
             </if>
 
             <if test="stage != null and stage != ''">
-                and t.company like '%' #{company} '%'
+                and t.stage like '%' #{stage} '%'
             </if>
 
             <if test="source != null and source != ''">
