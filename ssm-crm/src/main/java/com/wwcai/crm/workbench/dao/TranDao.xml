@@ -5,6 +5,39 @@
 
 <mapper namespace="com.wwcai.crm.workbench.dao.TranDao">
 
+    <delete id="delete">
+        delete from tbl_tran
+        where id in
+        <foreach collection="array" item="id" open="(" close=")"
+                 separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getTranListByContactsId" resultType="Tran">
+        select
+            id,
+            name,
+            stage,
+            type,
+            money,
+            expectedDate
+        from tbl_tran
+        where contactsId=#{contactsId}
+    </select>
+
+    <select id="getTranListByCustomerId" resultType="Tran">
+        select
+            id,
+            name,
+            stage,
+            type,
+            money,
+            expectedDate
+        from tbl_tran
+        where customerId=#{customerId}
+    </select>
+
     <update id="update">
         update tbl_tran set
            owner=#{owner},

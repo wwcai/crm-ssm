@@ -15,7 +15,16 @@ public class Customer {
 	private String nextContactTime;
 	private String description;
 	private String address;
-	
+	private String ctype;
+
+	public String getCtype() {
+		return ctype;
+	}
+
+	public void setCtype(String ctype) {
+		this.ctype = ctype;
+	}
+
 	public String getId() {
 		return id;
 	}

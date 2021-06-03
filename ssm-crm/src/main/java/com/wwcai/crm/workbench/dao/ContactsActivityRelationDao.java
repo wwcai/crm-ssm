@@ -5,4 +5,6 @@ import com.wwcai.crm.workbench.domain.ContactsActivityRelation;
 public interface ContactsActivityRelationDao {
 
     int save(ContactsActivityRelation contactsActivityRelation);
+
+    int unbund(String id);
 }

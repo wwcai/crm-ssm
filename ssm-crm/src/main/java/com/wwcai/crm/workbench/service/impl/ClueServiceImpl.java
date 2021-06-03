@@ -191,6 +191,7 @@ public class ClueServiceImpl implements ClueService {
             cus.setId(UUIDUtil.getUUID());
             cus.setName(company);
             cus.setPhone(c.getPhone());
+            cus.setCtype("新客户");
             cus.setNextContactTime(c.getNextContactTime());
             cus.setOwner(c.getOwner());
 
@@ -276,7 +277,7 @@ public class ClueServiceImpl implements ClueService {
         }
 
         // (6) 如果有创建交易需求，创建一条交易
-        if(t != null) {
+        if(t.getId() != null) {
             t.setSource(c.getSource());
             t.setOwner(c.getOwner());
             t.setNextContactTime(c.getNextContactTime());
@@ -376,5 +377,20 @@ public class ClueServiceImpl implements ClueService {
             flag = false;
 
         return flag;
+    }
+
+    @Override
+    public Map<String, Object> getChrats() {
+
+        int total = clueDao.getTotal();
+
+        List<Map<String, Object>> dataList = clueDao.getCharts();
+
+        // 将total和dataList保存到map中
+        Map<String, Object> map = new HashMap<>();
+        map.put("total", total);
+        map.put("dataList", dataList);
+
+        return map;
     }
 }

@@ -291,7 +291,36 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			}
 		})
 
+		$("#create-company").blur(function () {
+			var company = $("#create-company");
+			var companyerror = $(".create-company-error");
+			// companyVerify(company, companyerror);
+			if (company.val() == "" || company.val() == null) {
+				companyerror.css("color", "#FF0000").html("公司不能为空！");
+				return false;
+			} else if (/^[\u4e00-\u9fa5]|\(|\)|[0-9]$/.test(company.val())) {
+				companyerror.css("color", "#00BB00").html("√");
+				return true;
+			} else {
+				companyerror.css("color", "#FF0000").html("数字、字母、汉字和括号")
+				return false;
+			}
+		});
 
+		$("#create-fullname").blur(function () {
+			var fullname = $("#create-fullname");
+			var fullnameerror = $(".create-fullname-error");
+			if (fullname.val() == "" || fullname.val() == null) {
+				fullnameerror.css("color", "#FF0000").html("姓名不能为空！");
+				return false;
+			} else if (/^([\u4e00-\u9fa5]+|([a-zA-Z]+\s?)+)$/.test(fullname.val())) {
+				fullnameerror.css("color", "#00BB00").html("√");
+				return true;
+			} else {
+				fullnameerror.css("color", "#FF0000").html("汉字或字母");
+				return false;
+			}
+		})
 	});
 
 	function pageList(pageNo, pageSize) {
@@ -395,6 +424,26 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
         });
     }
 
+
+	// var company = $("#create-company");
+	// var companyerror = $(".create-company-error");
+	// company.blur(function () {
+	// 	alert("sdfsf")
+	// 	//companyVerify();
+	// });
+	function companyVerify(company, companyerror) {
+		alert("sdfs")
+		if (company.val() == "" || company.val() == null) {
+			companyerror.css("color", "#FF0000").html("公司不能为空！");
+			return false;
+		} else if (/^[\u4E00-\u9FA5\w]+\([\u4E00-\u9FA5\w]+\)$/.test(company.val())) {
+			companyerror.css("color", "#00BB00").html("√");
+			return true;
+		} else {
+			companyerror.css("color", "#FF0000").html("数字、字母、汉字和括号")
+			return false;
+		}
+	}
 </script>
 </head>
 <body>
@@ -430,6 +479,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<label for="create-company" class="col-sm-2 control-label">公司<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
 								<input type="text" class="form-control" id="create-company">
+								<label class="create-company-error"></label>
 							</div>
 						</div>
 						
@@ -446,7 +496,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</div>
 							<label for="create-surname" class="col-sm-2 control-label">姓名<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="create-fullname">
+								<input type="text" class="form-control" id="create-fullname"> <label class="create-fullname-error"></label>
 							</div>
 						</div>
 						

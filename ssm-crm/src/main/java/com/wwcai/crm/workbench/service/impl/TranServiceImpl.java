@@ -5,10 +5,7 @@ import com.wwcai.crm.settings.domain.User;
 import com.wwcai.crm.utils.DateTimeUtil;
 import com.wwcai.crm.utils.UUIDUtil;
 import com.wwcai.crm.vo.PaginationVo;
-import com.wwcai.crm.workbench.dao.ContactsDao;
-import com.wwcai.crm.workbench.dao.CustomerDao;
-import com.wwcai.crm.workbench.dao.TranDao;
-import com.wwcai.crm.workbench.dao.TranHistoryDao;
+import com.wwcai.crm.workbench.dao.*;
 import com.wwcai.crm.workbench.domain.*;
 import com.wwcai.crm.workbench.service.TranService;
 import org.springframework.stereotype.Service;
@@ -31,6 +28,8 @@ public class TranServiceImpl implements TranService {
     private ContactsDao contactsDao;
     @Resource
     private UserDao userDao;
+    @Resource
+    private TranRemarkDao tranRemarkDao;
 
     @Override
     public boolean save(Tran t, String customerName) {
@@ -228,6 +227,60 @@ public class TranServiceImpl implements TranService {
         if(count2 != 1)
             flag = false;
 
+
+        return flag;
+    }
+
+    @Override
+    public List<TranRemark> getRemarkListByTid(String tranId) {
+
+        List<TranRemark> tlist = tranRemarkDao.getRemarkListByTid(tranId);
+
+        return tlist;
+    }
+
+    @Override
+    public boolean saveRemark(TranRemark tr) {
+
+        Boolean flag = true;
+
+        int count = tranRemarkDao.save(tr);
+        if(count != 1)
+            flag = false;
+        return flag;
+    }
+
+    @Override
+    public boolean deleteRemark(String id) {
+
+        Boolean flag = true;
+
+        int count = tranRemarkDao.deleteRemark(id);
+        if(count != 1)
+            flag = false;
+        return flag;
+
+    }
+
+    @Override
+    public boolean updateRemark(TranRemark tr) {
+
+        Boolean flag = true;
+
+        int count = tranRemarkDao.updateRemark(tr);
+        if(count != 1)
+            flag = false;
+        return flag;
+    }
+
+    @Override
+    public Boolean delete(String[] ids) {
+
+        boolean flag = true;
+
+        int count = tranDao.delete(ids);
+        if (count < 1)
+            flag = false;
 
         return flag;
     }

@@ -23,4 +23,8 @@ public interface ClueDao {
     int delete(String[] ids);
 
     int delete1(String clueId);
+
+    int getTotal();
+
+    List<Map<String, Object>> getCharts();
 }

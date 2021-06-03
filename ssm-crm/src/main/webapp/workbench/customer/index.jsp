@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
@@ -24,7 +25,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	$(function(){
 
-		pageList(1, 2);
+		pageList(1, 4);
 		//定制字段
 		$("#definedColumns > li").click(function(e) {
 			//防止下拉菜单消失
@@ -52,6 +53,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$("#hidden-owner").val($.trim($("#search-owner").val()));
 			$("#hidden-phone").val($.trim($("#search-phone").val()));
 			$("#hidden-website").val($.trim($("#search-website").val()));
+			$("#hidden-ctype").val($.trim($("#search-ctype").val()));
 
 			pageList(1, $("#customerPage").bs_pagination('getOption', 'rowsPerPage'));
 		})
@@ -142,6 +144,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					"owner" : $.trim($("#create-owner").val()),
 					"phone" : $.trim($("#create-phone").val()),
 					"website" : $.trim($("#create-website").val()),
+					"ctype" : $.trim($("#create-ctype").val()),
 					"description" : $.trim($("#create-description").val()),
 					"contactSummary" : $.trim($("#create-contactSummary").val()),
 					"nextContactTime" : $.trim($("#create-nextContactTime").val()),
@@ -160,7 +163,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						$("#createCustomerModal").modal("hide");
 
 					} else {
-						alert("添加线索失败");
+						alert("添加客户失败");
 					}
 
 				}
@@ -210,6 +213,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						$("#edit-name").val(data.c.name);
 						$("#edit-owner").val(data.c.owner);
 						$("#edit-phone").val(data.c.phone);
+						$("#edit-ctype").val(data.c.phone);
 						$("#edit-description").val(data.c.description);
 						$("#edit-website").val(data.c.website);
 						$("#edit-contactSummary").val(data.c.contactSummary);
@@ -236,6 +240,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					"owner" : $.trim($("#edit-owner").val()),
 					"phone" : $.trim($("#edit-phone").val()),
 					"website" : $.trim($("#edit-website").val()),
+					"ctype" : $.trim($("#edit-ctype").val()),
 					"description" : $.trim($("#edit-description").val()),
 					"contactSummary" : $.trim($("#edit-contactSummary").val()),
 					"nextContactTime" : $.trim($("#edit-nextContactTime").val()),
@@ -275,7 +280,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#search-owner").val($.trim($("#hidden-owner").val()));
 		$("#search-phone").val($.trim($("#hidden-phone").val()));
 		$("#search-website").val($.trim($("#hidden-website").val()));
-
+		$("#search-ctype").val($.trim($("#hidden-ctype").val()));
 		$.ajax({
 			url : "workbench/customer/pageList.do",
 			data : {
@@ -284,7 +289,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				"name" : $.trim($("#search-name").val()),
 				"owner" : $.trim($("#search-owner").val()),
 				"phone" : $.trim($("#search-phone").val()),
-				"website" : $.trim($("#search-website").val())
+				"website" : $.trim($("#search-website").val()),
+				"ctype" : $.trim($("#search-ctype").val())
 			},
 			type : "get",
 			dataType : "json",
@@ -313,6 +319,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					html += '<td>' + n.owner + '</td>';
 					html += '<td>' + n.phone + '</td>';
 					html += '<td>' + n.website +'</td>';
+					html += '<td>' + n.ctype + '</td>';
 					html += '</tr>';
 
 				})
@@ -367,6 +374,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<input type="hidden" id="hidden-owner">
 	<input type="hidden" id="hidden-phone">
 	<input type="hidden" id="hidden-website">
+	<input type="hidden" id="hidden-ctype">
 
 	<!-- 创建客户的模态窗口 -->
 	<div class="modal fade" id="createCustomerModal" role="dialog">
@@ -403,6 +411,18 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<label for="create-phone" class="col-sm-2 control-label">公司座机</label>
 							<div class="col-sm-10" style="width: 300px;">
 								<input type="text" class="form-control" id="create-phone">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="create-ctype" class="col-sm-2 control-label">客户类型</label>
+							<div class="col-sm-10" style="width: 300px;">
+								<select class="form-control" id="create-ctype">
+									<option></option>
+									<option value="小微客户">小微客户</option>
+									<option value="普通客户">普通客户</option>
+									<option value="主要客户">主要客户</option>
+									<option value="VIP客户">VIP客户</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
@@ -486,7 +506,18 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<input type="text" class="form-control" id="edit-phone" >
 							</div>
 						</div>
-						
+						<div class="form-group">
+							<label for="create-ctype" class="col-sm-2 control-label">客户类型</label>
+							<div class="col-sm-10" style="width: 300px;">
+								<select class="form-control" id="edit-ctype">
+									<option></option>
+									<option value="小微客户">小微客户</option>
+									<option value="普通客户">普通客户</option>
+									<option value="主要客户">主要客户</option>
+									<option value="VIP客户">VIP客户</option>
+								</select>
+							</div>
+						</div>
 						<div class="form-group">
 							<label for="edit-describe" class="col-sm-2 control-label">描述</label>
 							<div class="col-sm-10" style="width: 81%;">
@@ -577,6 +608,19 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				      <input class="form-control" id="search-website" type="text">
 				    </div>
 				  </div>
+
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">客户类型</div>
+							<select class="form-control" id="search-ctype">
+								<option></option>
+								<option value="小微客户">小微客户</option>
+								<option value="普通客户">普通客户</option>
+								<option value="主要客户">主要客户</option>
+								<option value="VIP客户">VIP客户</option>
+							</select>
+						</div>
+					</div>
 				  
 				  <button type="button" id="search-button" class="btn btn-default">查询</button>
 				  
@@ -599,6 +643,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<td>所有者</td>
 							<td>公司座机</td>
 							<td>公司网站</td>
+							<td>客户类型</td>
 						</tr>
 					</thead>
 					<tbody id="customerBody">

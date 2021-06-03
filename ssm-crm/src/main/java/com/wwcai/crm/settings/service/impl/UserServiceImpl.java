@@ -35,9 +35,9 @@ public class UserServiceImpl implements UserService {
         // 需要继续向下验证其他三项信息
 
         // 判断IP地址
-        if(!user.getAllowIps().contains(ip)) {
+        /*if(!user.getAllowIps().contains(ip)) {
             throw new LoginException("您的ip地址受限");
-        }
+        }*/
 
         // 验证失效时间
         if(user.getExpireTime().compareTo(DateTimeUtil.getSysTime()) < 0) {

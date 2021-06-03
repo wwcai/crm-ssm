@@ -40,6 +40,28 @@
 
     </select>
 
+    <select id="getActivityByNameAndNotByContactsId" resultType="Activity">
+        select
+            a.id,
+            a.name,
+            a.startDate,
+            a.endDate,
+            u.name as owner
+        from tbl_activity a
+        join tbl_user u
+        on a.owner=u.id
+
+        where a.name like '%' #{aname} '%' and a.id not in (
+            select
+                activityId
+            from tbl_contacts_activity_relation
+
+            where contactsId=#{contactsId}
+        )
+
+
+    </select>
+
 
     <select id="getActivityListByClueId" resultType="Activity">
 
@@ -57,6 +79,25 @@
         on a.id=car.activityID
 
         where car.clueId=#{clueId}
+
+    </select>
+
+    <select id="getActivityListByContactsId" resultType="Activity">
+
+        select
+            car.id as id,
+            a.name,
+            a.startDate,
+            a.endDate,
+            u.name as owner
+
+        from tbl_activity a
+        join tbl_user u
+        on a.owner=u.id
+        join tbl_contacts_activity_relation car
+        on a.id=car.activityId
+
+        where car.contactsId=#{contactsId}
 
     </select>
 

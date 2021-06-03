@@ -2,14 +2,11 @@ package com.wwcai.crm.workbench.service.impl;
 
 import com.wwcai.crm.settings.dao.UserDao;
 import com.wwcai.crm.settings.domain.User;
-
+import com.wwcai.crm.utils.UUIDUtil;
 import com.wwcai.crm.vo.PaginationVo;
-import com.wwcai.crm.workbench.dao.ContactsDao;
-import com.wwcai.crm.workbench.dao.ContactsRemarkDao;
-import com.wwcai.crm.workbench.dao.CustomerDao;
-import com.wwcai.crm.workbench.domain.Contacts;
+import com.wwcai.crm.workbench.dao.*;
+import com.wwcai.crm.workbench.domain.*;
 import com.wwcai.crm.workbench.service.ContactsService;
-
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,12 +21,14 @@ public class ContactsServiceImpl implements ContactsService {
     private ContactsDao contactsDao;
     @Resource
     private ContactsRemarkDao contactsRemarkDao;
-
     @Resource
     private CustomerDao customerDao;
-
     @Resource
     private UserDao userDao;
+    @Resource
+    private TranDao tranDao;
+    @Resource
+    private ContactsActivityRelationDao contactsActivityRelationDao;
 
     @Override
     public List<Contacts> getContactsByName(String cname) {
@@ -103,5 +102,106 @@ public class ContactsServiceImpl implements ContactsService {
         return flag;
     }
 
+    @Override
+    public Boolean delete(String[] ids) {
+
+        Boolean flag = true;
+
+        int count = contactsDao.delete(ids);
+        if(count < 1)
+            flag = false;
+
+
+        return flag;
+    }
+
+    @Override
+    public List<ContactsRemark> getRemarkListByCid(String contactsId) {
+
+        List<ContactsRemark> clist = contactsRemarkDao.getRemarkListByCid(contactsId);
+
+        return clist;
+    }
+
+    @Override
+    public boolean saveRemark(ContactsRemark cr) {
+
+        Boolean flag = true;
+
+        int count = contactsRemarkDao.save(cr);
+        if (count != 1)
+            flag = false;
+
+        return flag;
+    }
+
+    @Override
+    public boolean deleteRemark(String id) {
+
+        Boolean flag = true;
+
+        int count = contactsRemarkDao.deleteRemark(id);
+        if (count != 1)
+            flag = false;
+
+        return flag;
+    }
+
+    @Override
+    public boolean updateRemark(ContactsRemark cr) {
+
+        Boolean flag = true;
+
+        int count = contactsRemarkDao.updateRemark(cr);
+
+        if (count != 1)
+            flag = false;
+
+        return flag;
+    }
+
+    @Override
+    public List<Tran> getTranListByContactsId(String contactsId) {
+
+        List<Tran> tlist = tranDao.getTranListByContactsId(contactsId);
+
+        return tlist;
+    }
+
+    @Override
+    public boolean bund(String cid, String[] aids) {
+        boolean flag = true;
+
+        for(String aid : aids) {
+
+            // 取得每一个aid与cid做关联
+            ContactsActivityRelation car = new ContactsActivityRelation();
+            car.setId(UUIDUtil.getUUID());
+            car.setActivityId(aid);
+            car.setContactsId(cid);
+
+            int count = contactsActivityRelationDao.save(car);
+            if(count < 1) {
+                flag = false;
+            }
+
+        }
+
+
+        return flag;
+    }
+
+    @Override
+    public boolean unbund(String id) {
+        boolean flag = true;
+
+        int count = contactsActivityRelationDao.unbund(id);
+
+        if (count != 1) {
+            flag = false;
+        }
+
+        return flag;
+    }
 
 }

@@ -353,6 +353,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		  role="form" style="position:
 	relative;
 	top: -30px;">
+		<input type="hidden" name="flag" value="${flag}">
+		<input type="hidden" name="flag2" value="${flag2}">
 		<div class="form-group">
 			<label for="create-transactionOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
@@ -391,7 +393,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<div class="col-sm-10" style="width: 300px;">
 				<input type="text" class="form-control"
 					   id="create-customerName" name="customerName"
-					   placeholder="支持自动补全，输入客户不存在则新建">
+					   placeholder="支持自动补全，输入客户不存在则新建" value="${flag == false ? customerName : ""}">
 			</div>
 			<label for="create-transactionStage" class="col-sm-2 control-label">阶段<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
@@ -450,8 +452,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				   class="col-sm-2 control-label">联系人名称&nbsp;&nbsp;<a
 					href="javascript:void(0);" id="openSearchBtn1" ><span class="glyphicon glyphicon-search"></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="contactsName">
-				<input type="hidden" id="contactsId" name="contactsId">
+				<input type="text" class="form-control" id="contactsName" value="${flag2 == false ? contactsName : ""}">
+				<input type="hidden" id="contactsId" name="contactsId" value="${flag2 == false ? contactsId : ""}">
 			</div>
 		</div>
 		

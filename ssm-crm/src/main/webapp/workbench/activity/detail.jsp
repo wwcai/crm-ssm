@@ -38,22 +38,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$("#remarkDiv").css("height","90px");
 			cancelAndSaveBtnDefault = true;
 		});
-		
-		$(".remarkDiv").mouseover(function(){
-			$(this).children("div").children("div").show();
-		});
-		
-		$(".remarkDiv").mouseout(function(){
-			$(this).children("div").children("div").hide();
-		});
-		
-		$(".myHref").mouseover(function(){
-			$(this).children("span").css("color","red");
-		});
-		
-		$(".myHref").mouseout(function(){
-			$(this).children("span").css("color","#E6E6E6");
-		});
+
+        $("#remarkBody").on("mouseover",".myHref",function(){
+            $(this).children("span").css("color","#FF0000");
+        })
+        $("#remarkBody").on("mouseout",".myHref",function(){
+            $(this).children("span").css("color","#E6E6E6");
+        })
 		
 		// 页面加载完毕后，展现该市场活动相关联的备注信息列表
 		showRemarkList();
@@ -101,10 +92,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                         html +=
                             '<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
                         html +=
-                            '<a class="myHref" href="javascript:void(0);"onclick="editRemark(\'' + data.ar.id + '\')"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
+                            '<a class="myHref" href="javascript:void(0);"onclick="editRemark(\'' + data.ar.id + '\')"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>';
                         html += '&nbsp;&nbsp;&nbsp;&nbsp;';
                         html +=
-                            '<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\'' + data.ar.id + '\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
+                            '<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\'' + data.ar.id + '\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>';
                         html += '</div>';
                         html += '</div>';
                         html += '</div>';
@@ -316,10 +307,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				html +=
 						'<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
 				html +=
-						'<a class="myHref" href="javascript:void(0);" onclick="editRemark(\'' + n.id + '\')"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
+						'<a class="myHref" href="javascript:void(0);" onclick="editRemark(\'' + n.id + '\')"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>';
 				html += '&nbsp;&nbsp;&nbsp;&nbsp;';
 				html +=
-						'<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\'' + n.id + '\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
+						'<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\'' + n.id + '\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>';
 				html += '</div>';
 				html += '</div>';
 				html += '</div>';

@@ -3,8 +3,14 @@ package com.wwcai.crm.workbench.service.impl;
 import com.wwcai.crm.settings.dao.UserDao;
 import com.wwcai.crm.settings.domain.User;
 import com.wwcai.crm.vo.PaginationVo;
+import com.wwcai.crm.workbench.dao.ContactsDao;
 import com.wwcai.crm.workbench.dao.CustomerDao;
+import com.wwcai.crm.workbench.dao.CustomerRemarkDao;
+import com.wwcai.crm.workbench.dao.TranDao;
+import com.wwcai.crm.workbench.domain.Contacts;
 import com.wwcai.crm.workbench.domain.Customer;
+import com.wwcai.crm.workbench.domain.CustomerRemark;
+import com.wwcai.crm.workbench.domain.Tran;
 import com.wwcai.crm.workbench.service.CustomerService;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +20,18 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class CustomerServiceImpl  implements CustomerService {
+public class CustomerServiceImpl implements CustomerService {
 
     @Resource
     private CustomerDao customerDao;
     @Resource
     private UserDao userDao;
+    @Resource
+    private CustomerRemarkDao customerRemarkDao;
+    @Resource
+    private TranDao tranDao;
+    @Resource
+    private ContactsDao contactsDao;
 
     @Override
     public List<String> getCustomerName(String name) {
@@ -50,7 +62,7 @@ public class CustomerServiceImpl  implements CustomerService {
 
         int count = customerDao.delete(ids);
 
-        if(count < 1)
+        if (count < 1)
             flag = false;
 
         return flag;
@@ -62,7 +74,7 @@ public class CustomerServiceImpl  implements CustomerService {
         boolean flag = true;
 
         int count = customerDao.save(c);
-        if(count != 1)
+        if (count != 1)
             flag = false;
 
         return flag;
@@ -88,7 +100,7 @@ public class CustomerServiceImpl  implements CustomerService {
         boolean flag = true;
 
         int count = customerDao.update(c);
-        if(count != 1)
+        if (count != 1)
             flag = false;
 
         return flag;
@@ -106,7 +118,82 @@ public class CustomerServiceImpl  implements CustomerService {
     public String getCustomerIdByName(String customerName) {
 
 
-
         return customerDao.getCustomerIdByName(customerName);
+    }
+
+    @Override
+    public boolean deleteRemark(String id) {
+
+        Boolean flag = true;
+
+        int count = customerRemarkDao.deleteRemark(id);
+        if (count != 1)
+            flag = false;
+        return flag;
+    }
+
+    @Override
+    public boolean saveRemark(CustomerRemark cr) {
+
+        Boolean flag = true;
+
+        int count = customerRemarkDao.save(cr);
+        if (count != 1)
+            flag = false;
+        return flag;
+
+    }
+
+    @Override
+    public List<CustomerRemark> getRemarkListByCid(String customerId) {
+
+        List<CustomerRemark> clist = customerRemarkDao.getRemarkListByCid(customerId);
+
+        return clist;
+    }
+
+    @Override
+    public boolean updateRemark(CustomerRemark cr) {
+
+        Boolean flag = true;
+
+        int count = customerRemarkDao.updateRemark(cr);
+        if (count != 1)
+            flag = false;
+        return flag;
+
+    }
+
+    @Override
+    public List<Tran> getTranListByCustomerId(String customerId) {
+
+        List<Tran> tlist = tranDao.getTranListByCustomerId(customerId);
+
+        return tlist;
+    }
+
+    @Override
+    public List<Contacts> getContactsListByCustomerId(String customerId) {
+
+        List<Contacts> clist = contactsDao.getContactsListByCustomerId(customerId);
+
+        return clist;
+    }
+
+    @Override
+    public Map<String, Object> getChrats() {
+
+        int total = customerDao.getTotal();
+
+        // 取得dataList
+        List<Map<String, Object>> dataList = customerDao.getCharts();
+
+        // 将total和dataList保存到map中
+        Map<String, Object> map = new HashMap<>();
+        map.put("total", total);
+        map.put("dataList", dataList);
+
+        return map;
+
     }
 }

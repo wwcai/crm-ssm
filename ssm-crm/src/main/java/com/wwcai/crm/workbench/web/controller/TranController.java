@@ -12,6 +12,7 @@ import com.wwcai.crm.workbench.service.CustomerService;
 import com.wwcai.crm.workbench.service.TranService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -157,6 +158,8 @@ public class TranController {
         System.out.println("执行添加交易操作");
 
         String customerName = request.getParameter("customerName");
+        Boolean flag = Boolean.valueOf(request.getParameter("flag"));
+        Boolean flag2 = Boolean.valueOf(request.getParameter("flag2"));
         String id = UUIDUtil.getUUID();
         String createTime = DateTimeUtil.getSysTime();
         String createBy =
@@ -166,10 +169,19 @@ public class TranController {
         t.setCreateBy(createBy);
         t.setCreateTime(createTime);
 
+        System.out.println("=====" + flag);
+        System.out.println("=====" + flag2);
 
-        boolean flag = ts.save(t,customerName);
 
-        if(flag) {
+        boolean flag1 = ts.save(t,customerName);
+
+        if (!flag)
+            return "redirect:/workbench/customer/detail.do?id=" + t.getCustomerId();
+
+        if (!flag2)
+            return "redirect:/workbench/contacts/detail.do?id=" + t.getContactsId();
+
+        if (flag1) {
 
             return "redirect:/workbench/transaction/index.jsp";
 
@@ -217,10 +229,27 @@ public class TranController {
 
         System.out.println("进入跳转到交易添加页的操作");
 
+        String customerName = request.getParameter("customerName");
+        String contactsName = request.getParameter("contactsName");
+        String contactsId = request.getParameter("contactsId");
         List<User> ulist = us.getUserList();
-
+        Boolean flag = true;
+        Boolean flag2 = true;
         request.setAttribute("ulist", ulist);
 
+        if (!"b".equals(customerName) && customerName != null) {
+            flag = false;
+            request.setAttribute("customerName", customerName);
+        }
+
+        if (!"c".equals(contactsName)) {
+            flag2 = false;
+            request.setAttribute("contactsName", contactsName);
+            request.setAttribute("contactsId", contactsId);
+        }
+
+        request.setAttribute("flag", flag);
+        request.setAttribute("flag2", flag2);
         return "/workbench/transaction/save.jsp";
     }
 
@@ -250,4 +279,95 @@ public class TranController {
 
         return vo;
     }
+
+    @RequestMapping(value = "/updateRemark.do")
+    @ResponseBody
+    public Map<String, Object> updateRemark(HttpServletRequest request, TranRemark tr) {
+
+        System.out.println("执行修改备注操作");
+
+        String editTime = DateTimeUtil.getSysTime();
+        String editBy =
+                ((User)request.getSession().getAttribute("user")).getName();
+        String editFlag = "1";
+        tr.setEditFlag(editFlag);
+        tr.setEditBy(editBy);
+        tr.setEditTime(editTime);
+
+        boolean flag = ts.updateRemark(tr);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", flag);
+        map.put("tr", tr);
+
+        return map;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/deleteRemark.do")
+    public Map<String, Boolean> deleteRemark(String id) {
+
+        System.out.println("删除备注信息");
+
+        boolean flag = ts.deleteRemark(id);
+
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("success", flag);
+
+        return map;
+    }
+
+    @RequestMapping(value = "/saveRemark.do")
+    @ResponseBody
+    public Map<String, Object> saveRemark(HttpServletRequest request, TranRemark tr) {
+
+        System.out.println("执行添加备注操作");
+
+        String id = UUIDUtil.getUUID();
+        // 创建时间：当前系统时间
+        String createTime = DateTimeUtil.getSysTime();
+        // 创建人：当前登录人
+        String createBy =
+                ((User)request.getSession().getAttribute("user")).getName();
+        String editFlag = "0";
+        tr.setId(id);
+        tr.setCreateBy(createBy);
+        tr.setCreateTime(createTime);
+        tr.setEditFlag(editFlag);
+
+        boolean flag = ts.saveRemark(tr);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", flag);
+        map.put("tr", tr);
+
+        return map;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getRemarkListByTid")
+    public List<TranRemark> getRemarkListByTid(String tranId) {
+
+        System.out.println("根据交易ID获取备注信息");
+
+        List<TranRemark> tList = ts.getRemarkListByTid(tranId);
+
+        return tList;
+    }
+
+    @RequestMapping(value = "/delete")
+    @ResponseBody
+    public Map<String, Boolean> delete(HttpServletRequest request) {
+
+        String[] ids = request.getParameterValues("id");
+
+        Boolean flag = ts.delete(ids);
+
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("success", flag);
+
+        return map;
+
+    }
+
 }

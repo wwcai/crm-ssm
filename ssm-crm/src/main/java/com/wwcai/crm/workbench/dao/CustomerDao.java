@@ -26,4 +26,8 @@ public interface CustomerDao {
     Customer detail(String id);
 
     String getCustomerIdByName(String customerName);
+
+    int getTotal();
+
+    List<Map<String, Object>> getCharts();
 }

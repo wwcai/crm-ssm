@@ -34,7 +34,6 @@ public class ClueController {
     @Resource
     private UserService us;
 
-
     @RequestMapping(value = "/updateRemark.do")
     @ResponseBody
     public Map<String, Object> updateRemark(HttpServletRequest request, ClueRemark cr) {
@@ -67,6 +66,7 @@ public class ClueController {
         boolean flag = cs.deleteRemark(id);
 
         Map<String, Boolean> map = new HashMap<>();
+        map.put("success", flag);
 
         return map;
     }
@@ -135,6 +135,7 @@ public class ClueController {
 
 
         boolean flag1 = cs.convert(clueId, t, createBy);
+        System.out.println(flag1);
         if(flag1) {
             return "redirect:/workbench/clue/index.jsp";
         }
@@ -197,7 +198,7 @@ public class ClueController {
         return map;
     }
 
-    @RequestMapping(value = "/upadte.do")
+    @RequestMapping(value = "/update.do")
     @ResponseBody
     public Map<String, Boolean> update(HttpServletRequest request,Clue clue) {
 
@@ -324,5 +325,15 @@ public class ClueController {
         return uList;
     }
 
+    @RequestMapping(value = "/getCharts.do")
+    @ResponseBody
+    public Map<String, Object> getCharts() {
+
+        System.out.println("取得交易阶段数量统计图标的数据");
+
+        Map<String, Object> map = cs.getChrats();
+
+        return map;
+    }
 
 }

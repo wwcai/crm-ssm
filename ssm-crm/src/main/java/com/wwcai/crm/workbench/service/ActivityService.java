@@ -33,4 +33,8 @@ public interface ActivityService {
     List<Activity> getActivityByNameAndNotByClueId(Map<String, String> map);
 
     List<Activity> getActivityByName(String aname);
+
+    List<Activity> getActivityByNameAndNotByContactsId(Map<String, String> map);
+
+    List<Activity> getActivityListByContactsId(String contactsId);
 }

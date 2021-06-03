@@ -24,4 +24,10 @@ public interface TranDao {
     Tran getTranById(String id);
 
     int update(Tran t);
+
+    List<Tran> getTranListByCustomerId(String customerId);
+
+    List<Tran> getTranListByContactsId(String contactsId);
+
+    int delete(String[] ids);
 }

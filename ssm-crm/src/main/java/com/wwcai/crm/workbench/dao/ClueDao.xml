@@ -5,6 +5,19 @@
 
 <mapper namespace="com.wwcai.crm.workbench.dao.ClueDao">
 
+    <select id="getCharts" resultType="map">
+
+        select
+            count(*) as value, state as name
+        from tbl_clue
+        group by state
+
+    </select>
+
+    <select id="getTotal" resultType="int">
+        select count(*) from tbl_Clue
+    </select>
+
     <delete id="delete1">
         delete from tbl_clue
         where id=#{id}

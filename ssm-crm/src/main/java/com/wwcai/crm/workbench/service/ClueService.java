@@ -34,4 +34,6 @@ public interface ClueService {
     boolean deleteRemark(String id);
 
     boolean updateRemark(ClueRemark cr);
+
+    Map<String, Object> getChrats();
 }

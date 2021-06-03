@@ -5,6 +5,26 @@
 
 <mapper namespace="com.wwcai.crm.workbench.dao.ContactsDao">
 
+    <select id="getContactsListByCustomerId" resultType="Contacts">
+        select
+            id,
+            fullname,
+            appellation,
+            email,
+            mphone
+        from tbl_contacts
+        where customerId=#{customerId}
+    </select>
+
+    <delete id="delete">
+        delete from tbl_contacts
+        where id in
+        <foreach collection="array" item="id" open="(" close=")"
+                 separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
     <update id="update">
         update tbl_contacts set
            owner=#{owner},
@@ -142,7 +162,7 @@
             </if>
 
             <if test="source != null and source != ''">
-                and c.source like '%' #{phone} '%'
+                and c.source like '%' #{source} '%'
             </if>
 
         </where>

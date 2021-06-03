@@ -264,6 +264,50 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			})
 
 		})
+
+		$("#deleteBtn").click(function () {
+			// 找到复选框中所有选中的复选框jquery对象
+			var $xz = $("input[name=xz]:checked");
+			if($xz.length == 0) {
+				alert("请选择要删除的记录");
+			} else {
+
+				if(confirm("你确定删除已选择的信息吗？")){
+					var param = "";
+
+					// 将$xz中的每一个dom对象遍历出来，取其value值，就相当于取得了要删除的数据的id值
+					for(i = 0; i < $xz.length; i++) {
+						param += "id=" + $($xz[i]).val();
+
+						if(i < $xz.length - 1) {
+							param += "&";
+						}
+					}
+					$.ajax({
+						url : "workbench/contacts/delete.do",
+						data : param,
+						type : "post",
+						dataType : "json",
+						success : function (data) {
+							/*
+                                data
+                                    {"success":true/false}
+                             */
+							if(data.success) {
+								// 删除成功
+								pageList(1,
+										$("#contactsPage").bs_pagination('getOption',
+												'rowsPerPage'));
+
+							} else {
+								alert("删除失败");
+							}
+						}
+					})
+				}
+
+			}
+		})
 		
 	});
 
@@ -675,7 +719,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<div class="btn-group" style="position: relative; top: 18%;">
 				  <button type="button" class="btn btn-primary" id="addBtn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
 				  <button type="button" class="btn btn-default" id="editBtn"></span> 修改</button>
-				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+				  <button type="button" class="btn btn-danger" id="deleteBtn"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
 				
 				
